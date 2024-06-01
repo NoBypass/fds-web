@@ -1,5 +1,7 @@
 <script lang="ts">
   import type { LayoutServerData } from './$types';
+  import { tabStore } from './store';
+  import Tag from '$lib/components/Tag.svelte';
 
   export let data: LayoutServerData;
 </script>
@@ -22,7 +24,7 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
       </svg>
     </a>
-    <!-- <p class="text-sm">{tab}</p> -->
+    <p class="text-sm">{$tabStore}</p>
   </nav>
 
   <nav class="border-r border-neutral-750 h-full w-64">
@@ -30,7 +32,7 @@
       <h2>Tabs</h2>
       <ul>
         <li>Home</li>
-        <li>Hypixel</li>
+        <li class="flex gap-3 items-center">Hypixel <Tag>Coming Soon</Tag></li>
         <li>Scrims</li>
       </ul>
     </section>

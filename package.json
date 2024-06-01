@@ -27,6 +27,9 @@
   },
   "type": "module",
   "dependencies": {
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
+    "lodash": "^4.17.21",
     "nanostores": "^0.10.3"
   }
 }
