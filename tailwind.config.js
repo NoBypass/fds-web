@@ -36,6 +36,11 @@ export default {
         '3': '3px',
       },
       colors: {
+        'scrims-premium': '#BB77FC',
+        'scrims-private': '#ADADE0',
+        'scrims-prime': '#74A8EE',
+        'scrims-pristine': '#20B3CF',
+        'scrims-member': '#46D6DA',
         neutral: {
           750: '#343434',
         }

@@ -8,6 +8,7 @@
   export let description = ''
   export let descriptionColor: 'neutral' | 'error' = 'neutral'
   export let color: 'primary' | 'success' | 'error' = 'primary'
+  export let small = false
 
   export { className as class }
 
@@ -55,18 +56,20 @@
 </script>
 
 <div class={className}>
-  <div class="cursor-text flex border px-3 rounded-lg has-[:focus]:outline has-[:focus]:outline-offset-2 outline-offset-0 duration-150 outline-1 transition-all has-[:focus]:animate-pulse {colors[color]}">
-    <span style="transform: translateY(10px) translateX({valWidth-3}px)"
+  <div class="cursor-text flex border {small ? 'px-2' : 'px-3'} rounded-lg has-[:focus]:outline has-[:focus]:outline-offset-2 outline-offset-0 duration-150 outline-1 transition-all has-[:focus]:animate-pulse {colors[color]}">
+    <span style="transform: translateY({small ? 4 : 10}px) translateX({valWidth-3}px)"
           class="{focused ? '' : 'hidden'} absolute bg-white ml-1 w-px h-5 transition-all duration-150 {cd ? '' : 'animate-blink'}" />
     <slot name="start" />
     <input type="text"
            use:focusOnParentClick
-           class="placeholder:text-neutral-400 py-1.5 caret-transparent w-full bg-transparent color-neutral-100 focus:outline-none"
+           class="placeholder:text-neutral-400 {small ? 'py-0.5' : 'py-1.5'} caret-transparent w-full bg-transparent color-neutral-100 focus:outline-none"
            placeholder={focused ? '' : placeholder}
            bind:this={inputElem}
            on:focus={() => focused = true}
            on:blur={() => focused = false}
-           on:keydown={(e) => { if (e.key === 'Enter') dispatch('enter', e) }}
+           on:keydown={(e) => { if (e.key === 'Enter') dispatch('enter', {
+              value
+           }) }}
            bind:value />
     <slot name="end" />
   </div>

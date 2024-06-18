@@ -1,9 +1,10 @@
 <script lang="ts">
   import Input from '$lib/components/Input.svelte';
   import axios from 'axios';
-  import { AxiosError } from 'axios';
   import lodash from 'lodash';
   import Loader from '$lib/components/Loader.svelte';
+  import { preloadData } from '$app/navigation';
+  import { playerNameLoadedStore } from './player/[name]/store';
 
   let name = ''
   let status = ''
@@ -13,24 +14,29 @@
 
   const fetchStatus = lodash.debounce(async () => {
     status = 'loading'
-    try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/player/exists/${name}`);
-      if (response.status === 200) {
-        status = 'success'
-      } else {
-        errorMsg = response.data.message
-        status = 'error'
-      }
-    } catch (error: any | AxiosError) {
-      if (error.response) {
-        errorMsg = error.response.data.message;
-      } else if (error.request) {
-        errorMsg = 'Could not connect to the server. Please try again later.';
-      } else {
-        errorMsg = 'An error occurred. Please try again later.';
-      }
-      status = 'error'
-    }
+      axios.get(`${import.meta.env.VITE_API_URL}/player/exists/${name}`)
+        .catch((e) => {
+          if (e.response) {
+            errorMsg = e.response.data.message;
+          } else if (e.request) {
+            errorMsg = 'Could not connect to the server. Please try again later.';
+          } else {
+            errorMsg = 'An error occurred. Please try again later.';
+          }
+          status = 'error'
+        })
+        .then((response) => {
+          if (response === undefined) return
+          if (response.status === 200) {
+            status = 'success'
+            name = response.data
+            preloadData(link)
+            playerNameLoadedStore.set(true)
+          } else {
+            errorMsg = response.data.message
+            status = 'error'
+          }
+        });
   }, 500)
 
   $: {
